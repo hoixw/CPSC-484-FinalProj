@@ -4,36 +4,12 @@
 <head>
     <title>Seat and Table Selection</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="script.js"></script>
 </head>
 
 <body class="bg-gray-100">
     <div class="container mx-auto py-8">
-        <div class="flex justify-center mb-10">
-            <div class="mr-8">
-                <div class="mb-4">
-                    <label for="table-select" class="block font-medium">Select Table:</label>
-                    <select id="table-select" class="border border-gray-300 rounded-md px-2 py-1">
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                    </select>
-                </div>
-                <div class="mb-4">
-                    <label for="seat-select" class="block font-medium">Select Seat:</label>
-                    <select id="seat-select" class="border border-gray-300 rounded-md px-2 py-1"></select>
-                </div>
-                <div class="mb-4">
-                    <label for="color-input" class="block font-medium">Enter Color (HEX):</label>
-                    <input type="text" id="color-input" placeholder="e.g. #8E8E8E"
-                        class="border border-gray-300 rounded-md px-2 py-1">
-                </div>
-                <button id="fillButton"
-                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Fill Seat</button>
-            </div>
-            <div>
+        <div>
+            <div class="flex justify-center mb-10">
                 <div class="mb-4">
                     <label for="table-select-vibe" class="block font-medium">Select Table:</label>
                     <select id="table-select-vibe" class="border border-gray-300 rounded-md px-2 py-1">
@@ -43,7 +19,6 @@
                         <option value="4">4</option>
                         <option value="5">5</option>
                     </select>
-                </div>
                 <div class="mb-4">
                     <label for="vibe-select" class="block font-medium">Select Vibe:</label>
                     <select id="vibe-select" class="border border-gray-300 rounded-md px-2 py-1">
@@ -60,6 +35,7 @@
             <object data="src/map.svg" type="image/svg+xml" id="map" class="w-full h-auto"></object>
         </div>
     </div>
+    <script src="script.js"></script>
 </body>
 
 </html>
