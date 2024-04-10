@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Table Confirmation</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-white flex flex-col items-center justify-center h-screen">
+  <div class="fixed top-0 left-0 m-4">
+    <div id="exit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded hover:cursor-pointer">
+      Exit
+    </div>
+  </div>
+  <p class="text-2xl mb-8 text-center">You selected</p>
+  <h1 id="table-number" class="text-4xl font-bold mb-4 text-center"></h1>
+  <p class="text-2xl mb-8 text-center">Is this correct?</p>
+  <div class="flex space-x-4">
+    <div id="no" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded hover:cursor-pointer">
+      No, go back!
+    </div>
+    <div id="yes" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded hover:cursor-pointer">
+      Yes!
+    </div>
+  </div>
+</body>
+</html>

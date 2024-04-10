@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Table Confirmation</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-gray-50 flex flex-col items-center justify-center min-h-screen py-12">
+    <div class="absolute top-0 left-0 m-4">
+        <div id="exit" class="bg-red-500 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-md shadow hover:shadow-md transition duration-150 ease-in-out cursor-pointer">
+            Exit
+        </div>
+    </div>
+    <p class="text-3xl font-semibold mb-10 text-center">Looks like you’re starting a session, select your study preference</p>
+    <div class="flex space-x-6 items-center justify-center">
+        <div id="relaxed"
+            class="bg-yellow-500 hover:bg-yellow-700 text-white font-semibold py-3 px-6 rounded-lg shadow hover:shadow-lg transition duration-150 ease-in-out cursor-pointer">
+            Relaxed
+        </div>
+        <div id="focused"
+            class="bg-green-500 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-lg shadow hover:shadow-lg transition duration-150 ease-in-out cursor-pointer">
+            Focused
+        </div>
+    </div>
+    <br>
+    <p class="text-3xl font-semibold mb-8 text-center">Hover your hand to select a focused or relaxed vibe</p>
+</body>
+
+</html>
