@@ -120,7 +120,7 @@ document.getElementById("map").addEventListener("load", function () {
         }
       }
 
-    document.getElementById("vibeButton").addEventListener("click", setVibe);
+    // document.getElementById("vibeButton").addEventListener("click", setVibe);
     const tableHovers = mapDoc.querySelectorAll("[data-hover]");
     tableHovers.forEach(hover => {
         hover.addEventListener("mouseenter", handleTableHover);
