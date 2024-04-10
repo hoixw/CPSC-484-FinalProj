@@ -1,9 +1,9 @@
 # CPSC 484 Final Project
 
 ## Members
-Alec Buffi - ajb268
-Manaka Ogura - mo588
-Mandy Zhang - mwz8
+Alec Buffi - ajb268,
+Manaka Ogura - mo588,
+Mandy Zhang - mwz8,
 Sachin Thakrar - sbt29
 
 # Interactive Map Application
