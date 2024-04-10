@@ -18,6 +18,7 @@
 
       hoverTimeout = setTimeout(() => {
         colorButton.classList.add('border-4', 'border-black');
+        selectedColor = color;
         redirectTimeout = setTimeout(() => {
           window.location.href = `color-confirmation.html?color=${color}`;
         }, 1500);

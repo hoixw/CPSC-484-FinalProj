@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Color Confirmation</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
+  <script>
+    let hoverTimeout;
+    let selectedColor = null;
+
+    function handleHover(action) {
+      clearTimeout(hoverTimeout);
+
+      const button = document.getElementById(action);
+      button.classList.remove('border-4', 'border-black');
+
+      hoverTimeout = setTimeout(() => {
+        button.classList.add('border-4', 'border-black');
+        if (action === 'exit') {
+          window.location.href = 'index.html';
+        } else if (action === 'go-back') {
+          window.location.href = 'color-tables.html';
+        } else if (action === 'yes') {
+            console.log('You selected the color: ${selectedColor}');
+        }
+
+      }, 3000);
+    }
+
+    function handleMouseLeave(action) {
+      clearTimeout(hoverTimeout);
+
+      const button = document.getElementById(action);
+      button.classList.remove('border-4', 'border-black');
+    }
+
+    window.onload = function() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const selectedColor = urlParams.get('color');
+      const colorText = document.getElementById('color-text');
+      if (selectedColor) {
+        colorText.textContent = `Looks like you selected ${selectedColor}!`;
+      } else {
+        colorText.textContent = 'No color selected.';
+      }
+    }
+  </script>
+</head>
+<body class="bg-white flex flex-col items-center justify-center h-screen">
+  <div class="fixed top-0 left-0 m-4">
+    <div id="exit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded hover:cursor-pointer" onmouseover="handleHover('exit')" onmouseleave="handleMouseLeave('exit')">
+      Exit
+    </div>
+  </div>
+  <h1 id="color-text" class="text-4xl font-bold mb-4"></h1>
+  <p class="text-2xl mb-8">Is this correct?</p>
+  <div class="flex space-x-4">
+    <div id="go-back" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded hover:cursor-pointer" onmouseover="handleHover('go-back')" onmouseleave="handleMouseLeave('go-back')">
+      No, go back!
+    </div>
+    <div id="yes" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded hover:cursor-pointer" onmouseover="handleHover('yes')" onmouseleave="handleMouseLeave('yes')">
+      Yes!
+    </div>
+  </div>
+</body>
+</html>
