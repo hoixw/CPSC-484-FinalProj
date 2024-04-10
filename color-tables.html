@@ -1,15 +1,79 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-    <title>Seat and Table Selection</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Color Selection</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
+  <script>
+    let hoverTimeout;
+    let redirectTimeout;
 
-<body class="bg-gray-500">
+    function handleHover(color) {
+      clearTimeout(hoverTimeout);
+      clearTimeout(redirectTimeout);
+
+      const colorButton = document.getElementById(color);
+      colorButton.classList.remove('border-4', 'border-black');
+
+      hoverTimeout = setTimeout(() => {
+        colorButton.classList.add('border-4', 'border-black');
+        redirectTimeout = setTimeout(() => {
+          window.location.href = `color-confirmation.html?color=${color}`;
+        }, 1500);
+      }, 1500);
+    }
+
+    function handleMouseLeave(color) {
+      clearTimeout(hoverTimeout);
+      clearTimeout(redirectTimeout);
+
+      const colorButton = document.getElementById(color);
+      colorButton.classList.remove('border-4', 'border-black');
+    }
+  </script>
+<body class="bg-white-500">
+    <div class="fixed top-0 left-0 m-4">
+        <a href="index.html" class="bg-red-500 hover:bg-gray-200 text-black font-bold py-8 px-10 text-xl rounded">
+            Exit
+        </a>
+    </div>"
+
+<div class="flex items-center justify-center h-[40vh] md:mt-16">
+    <h1 class="text-6xl font-bold text-gray-800 mb-20">
+        Hover your hand to select a color!
+    </h1>
+</div>
 
 
-
-
-    
+<div class="flex flex-col items-center justify-center space-y-8 md:space-y-0">
+<div class="space-y-20 mb-20">
+    <div class="flex justify-center space-x-32">
+      <div id="red" class="bg-red-500 rounded-full w-40 h-40 flex items-center justify-center text-white text-2xl font-bold hover:cursor-pointer" onmouseover="handleHover('red')" onmouseleave="handleMouseLeave('red')">
+        Red
+      </div>
+      <div id="yellow" class="bg-yellow-200 rounded-full w-40 h-40 flex items-center justify-center text-white text-2xl font-bold hover:cursor-pointer" onmouseover="handleHover('yellow')" onmouseleave="handleMouseLeave('yellow')">
+        Yellow
+      </div>
+      <div id="blue" class="bg-blue-500 rounded-full w-40 h-40 flex items-center justify-center text-white text-2xl font-bold hover:cursor-pointer" onmouseover="handleHover('blue')" onmouseleave="handleMouseLeave('blue')">
+        Blue
+      </div>
+    </div>
+</div>
+    <div class="flex justify-center space-x-32 mt-10 md:mt-10">
+      <div id="green" class="bg-green-500 rounded-full w-40 h-40 flex items-center justify-center text-white text-2xl font-bold hover:cursor-pointer" onmouseover="handleHover('green')" onmouseleave="handleMouseLeave('green')">
+        Green
+      </div>
+      <div id="purple" class="bg-purple-500 rounded-full w-40 h-40 flex items-center justify-center text-white text-2xl font-bold hover:cursor-pointer" onmouseover="handleHover('purple')" onmouseleave="handleMouseLeave('purple')">
+        Purple
+      </div>
+    </div>
+  </div>
+  <div class="fixed bottom-0 left-0 m-4">
+    <a href="index.html" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-4 px-8 rounded">
+      Go Back
+    </a>
+  </div>
 </body>
+</html>
+
