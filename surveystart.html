@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AKW Group Work Sessions - Initial Screening</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom range input styles */
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 12px;
+            background: #e0e0e0;
+            border-radius: 6px;
+            outline: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 24px;
+            height: 24px;
+            background: #2563eb;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 24px;
+            height: 24px;
+            background: #2563eb;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white">
+    <div class="flex items-center justify-center h-screen">
+        <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md text-gray-900">
+            <h1 class="text-2xl font-bold mb-4 text-center">AKW Group Work Sessions</h1>
+            <h2 class="text-lg font-bold mb-4 text-center">Initial Screening</h2>
+            <p class="mb-4 text-center">How stressed are you feeling?</p>
+            <div class="flex flex-col items-center">
+                <input type="range" min="1" max="5" value="3" class="mb-4 w-full" oninput="updateStressLevel(this.value)">
+                <div class="flex justify-between w-full">
+                    <span>1 - not very</span>
+                    <span>3 - neutral</span>
+                    <span>5 - very</span>
+                </div>
+            </div>
+            <div class="flex justify-between mt-4">
+                <a href="index.html" class="bg-yellow-400 hover:bg-yellow-500 text-gray-800 font-bold py-2 px-4 rounded">Go Back</a>
+                <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded" onclick="saveStressLevel()">Next</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function updateStressLevel(value) {
+            // Update the UI to reflect the selected stress level
+            console.log(`Stress level selected: ${value}`);
+        }
+
+        function saveStressLevel() {
+            const selectedStressLevel = document.querySelector('input[type="range"]').value;
+            localStorage.setItem('selectedStressLevel', selectedStressLevel);
+            // Redirect to the next page or perform additional actions
+            window.location.href = 'color-tables.html';
+        }
+    </script>
+</body>
+</html>
