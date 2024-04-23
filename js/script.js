@@ -3,11 +3,24 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById("map").addEventListener("load", function () {
 
         const hoverSelectionTime = 1000;
+        const kinectCursorRefreshTime = 100;
         const mapObject = document.getElementById("map").contentDocument;
+        const cursor = document.querySelector('.cursor');
         let hoverTimers = {};
 
         processSVGMap();
         enableMapEventListeners();
+
+        function isOverlapping(rect1, rect2) {
+            return !(
+                rect1.right < rect2.left ||
+                rect1.left > rect2.right ||
+                rect1.bottom < rect2.top ||
+                rect1.top > rect2.bottom
+            );
+        }
+        
+        
 
 
         function addTableOutline(tableNum) {
@@ -22,8 +35,30 @@ document.addEventListener('DOMContentLoaded', function () {
         function enableMapEventListeners() {
             const tableHovers = mapObject.querySelectorAll("[data-hover]");
             tableHovers.forEach(hover => {
+                // For Kinect Cursor compatibility
+                setInterval(() => {
+                    if (document.getElementById('modal').classList.contains('hidden')) {
+                        const cursorRect = cursor.getBoundingClientRect();
+                        const hoverRect = hover.getBoundingClientRect();
+            
+                        if (isOverlapping(cursorRect, hoverRect)) {
+                            if (!hover.classList.contains('hover')) {
+                                hover.classList.add('hover');
+                                handleTableHover({ target: hover });
+                            }
+                        } else {
+                            if (hover.classList.contains('hover')) {
+                                hover.classList.remove('hover');
+                                handleTableUnhover({ target: hover });
+                            }
+                        }
+                    }
+                }, kinectCursorRefreshTime);
+
+                // Code for mouse (to keep compatibility)
                 hover.addEventListener("mouseenter", handleTableHover);
                 hover.addEventListener("mouseleave", handleTableUnhover);
+
             });
         }
 
@@ -31,6 +66,7 @@ document.addEventListener('DOMContentLoaded', function () {
         function enableColorSelectionEventListeners(resolve) {
             const colors = ['red', 'green', 'blue', 'yellow', 'purple', 'exit'];
 
+            // Code for mouse (to keep compatibility)
             colors.forEach(colorId => {
                 const color = document.getElementById(colorId);
 
@@ -51,12 +87,43 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                 });
             });
+            
+            // Kinect cursor code
+            colors.forEach(colorId => {
+                const color = document.getElementById(colorId);
+        
+                setInterval(() => {
+                    const cursorRect = cursor.getBoundingClientRect();
+                    const colorRect = color.getBoundingClientRect();
+        
+                    if (isOverlapping(cursorRect, colorRect)) {
+                        if (!color.classList.contains('hover')) {
+                            color.classList.add('hover');
+                            if (hoverTimers[colorId]) {
+                                clearTimeout(hoverTimers[colorId]);
+                            }
+                            hoverTimers[colorId] = setTimeout(() => {
+                                resolve(colorId);
+                            }, hoverSelectionTime);
+                        }
+                    } else {
+                        if (color.classList.contains('hover')) {
+                            color.classList.remove('hover');
+                            if (hoverTimers[colorId]) {
+                                clearTimeout(hoverTimers[colorId]);
+                                hoverTimers[colorId] = null;
+                            }
+                        }
+                    }
+                }, kinectCursorRefreshTime);
+            });
         }
 
 
         function enableConfirmationEventListeners(resolve) {
             const buttons = ['yes', 'no', 'exit'];
-
+            
+            // Code for mouse (to keep compatibility)
             buttons.forEach(buttonId => {
                 const button = document.getElementById(buttonId);
 
@@ -77,12 +144,43 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                 });
             });
+
+            // Kinect cursor code
+            buttons.forEach(buttonId => {
+                const button = document.getElementById(buttonId);
+        
+                setInterval(() => {
+                    const cursorRect = cursor.getBoundingClientRect();
+                    const buttonRect = button.getBoundingClientRect();
+        
+                    if (isOverlapping(cursorRect, buttonRect)) {
+                        if (!button.classList.contains('hover')) {
+                            button.classList.add('hover');
+                            if (hoverTimers[buttonId]) {
+                                clearTimeout(hoverTimers[buttonId]);
+                            }
+                            hoverTimers[buttonId] = setTimeout(() => {
+                                resolve(buttonId);
+                            }, hoverSelectionTime);
+                        }
+                    } else {
+                        if (button.classList.contains('hover')) {
+                            button.classList.remove('hover');
+                            if (hoverTimers[buttonId]) {
+                                clearTimeout(hoverTimers[buttonId]);
+                                hoverTimers[buttonId] = null;
+                            }
+                        }
+                    }
+                }, kinectCursorRefreshTime);
+            })
         }
 
 
         function enableVibeSelectionEventListeners(resolve) {
             const vibe = ['relaxed', 'focused', 'exit'];
-
+            
+            // Code for mouse (to keep compatibility)
             vibe.forEach(vibeId => {
                 const vibe = document.getElementById(vibeId);
 
@@ -102,6 +200,36 @@ document.addEventListener('DOMContentLoaded', function () {
                         hoverTimers[vibeId] = null;
                     }
                 });
+            });
+
+            // Kinect cursor code
+            vibe.forEach(vibeId => {
+                const vibe = document.getElementById(vibeId);
+        
+                setInterval(() => {
+                    const cursorRect = cursor.getBoundingClientRect();
+                    const vibeRect = vibe.getBoundingClientRect();
+        
+                    if (isOverlapping(cursorRect, vibeRect)) {
+                        if (!vibe.classList.contains('hover')) {
+                            vibe.classList.add('hover');
+                            if (hoverTimers[vibeId]) {
+                                clearTimeout(hoverTimers[vibeId]);
+                            }
+                            hoverTimers[vibeId] = setTimeout(() => {
+                                resolve(vibeId);
+                            }, hoverSelectionTime);
+                        }
+                    } else {
+                        if (vibe.classList.contains('hover')) {
+                            vibe.classList.remove('hover');
+                            if (hoverTimers[vibeId]) {
+                                clearTimeout(hoverTimers[vibeId]);
+                                hoverTimers[vibeId] = null;
+                            }
+                        }
+                    }
+                }, 100);
             });
         }
 
