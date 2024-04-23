@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AKW Group Work Sessions - Initial Screening</title>
+  <script>
+    // Your existing JavaScript code...
+
+    window.addEventListener("DOMContentLoaded", (event) => {
+        const submitButton = document.getElementById('submitButton');
+        if(submitButton) {
+            submitButton.addEventListener('click', handleSubmit);
+        }
+    });
+    
+    function handleSubmit() {
+        const engagementValue = document.getElementById('engagement-range').value;
+        const formData = new FormData();
+        formData.append('engagement', engagementValue);
+        console.log("found val");
+
+        fetch('http://localhost:3000/survey-results', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            if (response.ok) {
+            return response.text();
+            } else {
+            throw new Error('Failed to submit survey');
+            }
+        })
+        .then(data => {
+            console.log(data);
+            // Handle successful submission
+        })
+        .catch(error => {
+            console.error(error);
+            // Handle submission error
+        });
+    }
+
+  </script>
+        <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffffff;
+
+            color: rgb(0, 0, 0);
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .slider-container {
+            background-color: #dbdbdb;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+            cursor: pointer;
+        }
+        input[type="range"]:focus {
+            outline: none;
+        }
+        input[type="range"]::-webkit-slider-runnable-track {
+            height: 8px;
+            background: #626D9B;
+            border-radius: 5px;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            border: none;
+            height: 24px;
+            width: 24px;
+            border-radius: 12px;
+            background: black;
+            margin-top: -8px;
+        }
+        input[type="range"]:focus::-webkit-slider-runnable-track {
+            background: #626D9B;
+        }
+        .labels {
+            display: flex;
+            justify-content: space-between;
+            padding: 0 10px;
+            font-size: 0.9em;
+        }
+        button, .back-link {
+            background-color: #2C324A;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            display: inline-block;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover, .back-link:hover {
+            background-color: #8595fc;
+        }
+        .exit-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .instructions {
+            font-size: 0.8em;
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body>
+    <button class="exit-button">Exit</button>
+    <div class="container">
+        <div class="slider-container">
+            <h1>AKW Group Work Sessions</h1>
+            <h2>Initial Screening</h2>
+            <label for="engagement-range">How much engagement in AKW have you done in the past?</label>
+            <input type="range" id="engagement-range" name="engagement" min="1" max="5" step="1">
+            <div class="labels">
+                <span>1 - not very</span>
+                <span>3 - neutral</span>
+                <span>5 - very</span>
+            </div>
+        </div>
+        <div class="navigation">
+            <a href="#" class="back-link">Go Back</a>
+            <button type="button" id="submitButton">Submit</button>
+        </div>
+        <div class="instructions">
+            Please hold up the number of fingers for your answer
+        </div>
+    </div>
+</body>
+</html>
