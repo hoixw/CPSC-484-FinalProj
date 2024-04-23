@@ -308,7 +308,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                         hideModal();
 
-                        const colorSelectionResponse = await showConfirmation("Color:", responseFromColorSelection);
+                        const colorSelectionResponse = await showConfirmation("Color:", (responseFromColorSelection.charAt(0).toUpperCase() + responseFromColorSelection.slice(1)));
 
                         if (colorSelectionResponse === 'yes') {
                             seat.color = responseFromColorSelection;
