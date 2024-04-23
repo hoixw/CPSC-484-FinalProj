@@ -4,6 +4,7 @@ function handleSubmit() {
     // Send the form data to the server-side script
     fetch('/path/to/server-side-script.php', {
       method: 'POST',
+      headers: {
         'Content-Type': 'application/x-www-form-urlencoded'
       },
       body: `engagement=${engagementValue}`
