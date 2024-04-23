@@ -5,11 +5,45 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AKW Group Work Sessions - Initial Screening</title>
     <script src="https://cdn.tailwindcss.com"></script>
+
+
+    <script>
+        let hoverTimeout;
+        let selectedColor = null;
+    
+        function handleHover(action) {
+          clearTimeout(hoverTimeout);
+    
+          const button = document.getElementById(action);
+          button.classList.remove('border-4', 'border-black');
+    
+          hoverTimeout = setTimeout(() => {
+            button.classList.add('border-4', 'border-black');
+            if (action === 'exit') {
+              window.location.href = 'index.html';
+            } else if (action === 'go-back') {
+              window.location.href = 'survey-one.html';
+            } else if (action === 'submit') {
+                window.location.href = 'index.html'; //change to fourth page
+            }
+    
+          }, 3000);
+        }
+    
+        function handleMouseLeave(action) {
+          clearTimeout(hoverTimeout);
+    
+          const button = document.getElementById(action);
+          button.classList.remove('border-4', 'border-black');
+        }
+      </script>
+
+
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #ffffff;
-            color: rgb(0, 0, 0);
+            background-color: #333A56;
+            color: white;
             margin: 0;
             padding: 20px;
         }
@@ -19,7 +53,7 @@
             text-align: center;
         }
         .slider-container {
-            background-color: #ffffff;
+            background-color: #4F5B93;
             padding: 20px;
             border-radius: 10px;
             margin-bottom: 20px;
@@ -35,7 +69,7 @@
         }
         input[type="range"]::-webkit-slider-runnable-track {
             height: 8px;
-            background: #ababab;
+            background: #626D9B;
             border-radius: 5px;
         }
         input[type="range"]::-webkit-slider-thumb {
@@ -70,6 +104,7 @@
         button:hover, .back-link:hover {
             background-color: #3A416F;
         }
+       
         .instructions {
             font-size: 0.8em;
             opacity: 0.6;
@@ -77,22 +112,33 @@
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="fixed top-0 left-0 m-4">
+        <div id="exit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded hover:cursor-pointer" onmouseover="handleHover('exit')" onmouseleave="handleMouseLeave('exit')">
+          Exit
+        </div>
+      </div>
+          <div class="container">
         <div class="slider-container">
             <h1>AKW Group Work Sessions</h1>
             <h2>Initial Screening</h2>
-            <label for="motivation-range">How motivated do you feel?</label>
-            <input type="range" id="motivation-range" name="motivation" min="1" max="5" step="1">
+            <label for="engagement-range">How motivated do you feel?</label>
+            <input type="range" id="engagement-range" name="engagement" min="1" max="5" step="1">
             <div class="labels">
                 <span>1 - not very</span>
                 <span>3 - neutral</span>
                 <span>5 - very</span>
             </div>
         </div>
-        <div class="navigation">
-            <a href="#" class="back-link">Go Back</a>
-            <button type="button">Next</button>
-        </div>
+
+        <div class="flex space-x-4">
+            <div id="go-back" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded hover:cursor-pointer" onmouseover="handleHover('go-back')" onmouseleave="handleMouseLeave('go-back')">
+            Go back!
+            </div>
+            <div id="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded hover:cursor-pointer" onmouseover="handleHover('yes')" onmouseleave="handleMouseLeave('yes')">
+              Submit
+            </div>
+          </div>
+
         <div class="instructions">
             Please hold up the number of fingers for your answer
         </div>
