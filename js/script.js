@@ -6,6 +6,8 @@ document.addEventListener('DOMContentLoaded', function () {
         const kinectCursorRefreshTime = 100;
         const mapObject = document.getElementById("map").contentDocument;
         const cursor = document.querySelector('.cursor');
+        let eventListeners = [];
+        let intervals = [];
         let hoverTimers = {};
 
         processSVGMap();
@@ -92,7 +94,7 @@ document.addEventListener('DOMContentLoaded', function () {
             colors.forEach(colorId => {
                 const color = document.getElementById(colorId);
         
-                setInterval(() => {
+                const intervalId = setInterval(() => {
                     const cursorRect = cursor.getBoundingClientRect();
                     const colorRect = color.getBoundingClientRect();
         
@@ -116,6 +118,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         }
                     }
                 }, kinectCursorRefreshTime);
+                intervals.push(intervalId);
             });
         }
 
@@ -149,7 +152,7 @@ document.addEventListener('DOMContentLoaded', function () {
             buttons.forEach(buttonId => {
                 const button = document.getElementById(buttonId);
         
-                setInterval(() => {
+                const intervalId =  setInterval(() => {
                     const cursorRect = cursor.getBoundingClientRect();
                     const buttonRect = button.getBoundingClientRect();
         
@@ -173,6 +176,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         }
                     }
                 }, kinectCursorRefreshTime);
+                intervals.push(intervalId);
             })
         }
 
@@ -206,7 +210,7 @@ document.addEventListener('DOMContentLoaded', function () {
             vibe.forEach(vibeId => {
                 const vibe = document.getElementById(vibeId);
         
-                setInterval(() => {
+                const intervalId = setInterval(() => {
                     const cursorRect = cursor.getBoundingClientRect();
                     const vibeRect = vibe.getBoundingClientRect();
         
@@ -229,7 +233,8 @@ document.addEventListener('DOMContentLoaded', function () {
                             }
                         }
                     }
-                }, 100);
+                }, kinectCursorRefreshTime);
+                intervals.push(intervalId);
             });
         }
 
@@ -296,12 +301,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
                         tableInfo.vibe = vibeSelectionResponse;
 
-                        hideModal();
-
                         let responseFromColorSelection = null;
                         let colorSelectionResponse = null;
 
                         while (colorSelectionResponse !== 'yes') {
+                            hideModal();
                             responseFromColorSelection = await showColorSelection();
 
                             if (responseFromColorSelection === 'exit') {
@@ -309,7 +313,8 @@ document.addEventListener('DOMContentLoaded', function () {
                                 hideModal();
                                 return;
                             }
-
+                            
+                            hideModal();
                             colorSelectionResponse = await showConfirmation("Color:", (responseFromColorSelection.charAt(0).toUpperCase() + responseFromColorSelection.slice(1)));
 
                             if (colorSelectionResponse === 'no') {
@@ -322,7 +327,6 @@ document.addEventListener('DOMContentLoaded', function () {
                         }
 
                         seat.color = responseFromColorSelection;
-
                         hideModal();
                         storeTableMapInLocalStorage(tableMap);
                         updateSVGMap();
@@ -337,6 +341,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
         function hideModal() {
             document.getElementById('modal').classList.add('hidden');
+            intervals.forEach(intervalId => {
+                clearInterval(intervalId);
+            });
+            intervals = [];
         }
 
 
