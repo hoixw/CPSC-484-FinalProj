@@ -56,7 +56,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             }
                         }
                     }
-                }, kinectCursorRefreshTime);
+                }, kinectCursorRefreshTime+500);
                 intervals.push(intervalId);
             });
         }

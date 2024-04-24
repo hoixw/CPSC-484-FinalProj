@@ -30,6 +30,7 @@ The `script.js` file is the core of the application's functionality. Here's a br
 
 - Initializes event listeners on DOM content load.
 - Adds listeners for table selection and hover effects on the SVG map.
+- Removes event listeners and overlap detectors as needed, to stop memory leaks and unintended actions. 
 
 ### Table Interaction
 
@@ -56,6 +57,5 @@ The `script.js` file is the core of the application's functionality. Here's a br
 3. Items can be selected through cursor hovering. The hover is currently set to 1.5 seconds, but may be adjusted.
 
 ## Bugs
-
 1. Sessions do not expire at the moment. The current session will last until the user refreshes their browser.
-2. The kinect cursor can be unpredictable, but this is due to the data provided to the site.
+2. The kinect cursor can be unpredictable, but this is (largely) due to the data provided to the site.

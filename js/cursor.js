@@ -100,6 +100,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
             // Updates cursor position
             update_cursor: function (result) {
+                console.log("test");
+                cursor.style.transition = 'bottom 0.08s ease-out, left 0.08s ease-out';
                 cursor.style.bottom = `${result.y}px`;
                 cursor.style.left = `${result.x}px`;
             },
