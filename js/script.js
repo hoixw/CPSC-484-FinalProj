@@ -451,21 +451,6 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         }
 
-        function showSurveyQuestion(question) {
-            return new Promise((resolve, reject) => {
-                fetch('/survey.html')
-                    .then(response => response.text())
-                    .then(html => {
-                        document.getElementById('modal-content').innerHTML = html;
-                        document.getElementById('question').textContent = `${question}`;
-
-                        enableSurveyEventListeners(resolve);
-
-                        document.getElementById('modal').classList.remove('hidden');
-                    });
-            });
-        }
-
 
         function storeTableMapInLocalStorage(tableMap) {
             localStorage.setItem('tableMap', JSON.stringify(tableMap));
