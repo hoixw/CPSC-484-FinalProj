@@ -7,6 +7,63 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const cursor = document.querySelector(".cursor");
 
+        // Kinect observed values
+        const minX = -60,
+            maxX = 200;
+        const minY = 0,
+            maxY = 250;
+
+        // Screen resolution
+        const targetMinX = 0,
+            targetMaxX = 1920;
+        const targetMinY = -1080,
+            targetMaxY = 0;
+
+        const centerX = (minX + maxX) / 2;
+        const centerY = (minY + maxY) / 2;
+
+        targetX = 0;
+        targetY = 0;
+
+        currentX = 0;
+        currentY = 0;
+
+        smoothing = 0.05;
+
+        function boundsCheck(x, y) {
+            normalizedX = Math.max(
+                targetMinX,
+                Math.min(x, targetMaxX),
+            );
+            normalizedY = Math.max(
+                targetMinY,
+                Math.min(y, targetMaxY),
+            );
+
+            return normalizedX, normalizedY;
+        }
+
+        function updatePosition(postion) {
+            var normalizedX, normalizedY = boundsCheck(postion.x, postion.y);
+
+            targetX = normalizedX;
+            targetY = normalizedY;
+        }
+
+        function animate() {
+            const dx = targetX - currentX;
+            const dy = targetY - currentY;
+
+            currentX += dx * smoothing;
+            currentY += dy * smoothing;
+
+            cursor.style.transform = `translate(${currentX}px, ${currentY}px)`;
+
+            requestAnimationFrame(animate);
+        }
+
+        animate()
+
         var frames = {
             socket: null,
 
@@ -17,7 +74,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     var data = JSON.parse(event.data);
                     var command = frames.get_right_wrist_command(data);
                     if (command !== null) {
-                        frames.update_cursor(command);
+                        updatePosition(command);
                     }
                 };
             },
@@ -25,22 +82,8 @@ document.addEventListener("DOMContentLoaded", function () {
             get_right_wrist_command: function (frame) {
                 let person = frame.people[0];
 
-                // Kinect observed values
-                const minX = -60,
-                    maxX = 200;
-                const minY = 0,
-                    maxY = 250;
 
-                // Screen resolution
-                const targetMinX = 0,
-                    targetMaxX = 1920;
-                const targetMinY = -1080,
-                    targetMaxY = 0;
 
-                const centerX = (minX + maxX) / 2;
-                const centerY = (minY + maxY) / 2;
-
-                
                 if (frame.people.length < 1) {
                     return null;
                 } else if (frame.people.length > 1) {
@@ -71,12 +114,12 @@ document.addEventListener("DOMContentLoaded", function () {
                     var normalizedX =
                         ((pelvis.pixel.x - right_wrist.pixel.x - minX) *
                             (targetMaxX - targetMinX)) /
-                            (maxX - minX) +
+                        (maxX - minX) +
                         targetMinX;
                     var normalizedY =
                         ((pelvis.pixel.y - right_wrist.pixel.y - minY) *
                             (targetMaxY - targetMinY)) /
-                            (maxY - minY) +
+                        (maxY - minY) +
                         targetMinY;
 
                     // Ensure the normalised values are not outside bounds
