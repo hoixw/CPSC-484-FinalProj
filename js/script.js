@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("map").addEventListener("load", function () {
         const hoverSelectionTime = 1500;
-        const kinectCursorRefreshTime = 100;
+        const kinectCursorRefreshTime = 25;
         const mapObject = document.getElementById("map").contentDocument;
         const cursor = document.querySelector(".cursor");
         let ENABLEKINECT = true;
@@ -87,6 +87,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     const intervalId = setInterval(() => {
                         const cursorRect = cursor.getBoundingClientRect();
                         const elementRect = element.getBoundingClientRect();
+                        const hoverClasses = Array.from(element.classList).filter(cls => cls.startsWith('hover:'));
 
                         if (isOverlapping(cursorRect, elementRect)) {
                             if (!element.classList.contains("hover")) {
@@ -97,7 +98,14 @@ document.addEventListener("DOMContentLoaded", function () {
                                 hoverTimers[elementId] = setTimeout(() => {
                                     resolve(elementId);
                                 }, hoverSelectionTime);
+
+                                hoverClasses.forEach(cls => {
+                                    const hoverStyle = cls.replace('hover:', '');
+                                    // console.log(hoverStyle);
+                                    element.classList.add(hoverStyle);
+                                });
                             }
+
                         } else {
                             if (element.classList.contains("hover")) {
                                 element.classList.remove("hover");
@@ -105,6 +113,11 @@ document.addEventListener("DOMContentLoaded", function () {
                                     clearTimeout(hoverTimers[elementId]);
                                     hoverTimers[elementId] = null;
                                 }
+                                hoverClasses.forEach(cls => {
+                                    const hoverStyle = cls.replace('hover:', '');
+                                    // console.log(hoverStyle);
+                                    element.classList.remove(hoverStyle);
+                                });
                             }
                         }
                     }, kinectCursorRefreshTime);
