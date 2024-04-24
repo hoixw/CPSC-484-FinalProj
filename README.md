@@ -1,12 +1,13 @@
 # CPSC 484 Final Project
 
 ## Members
+
 Alec Buffi - ajb268,
 Manaka Ogura - mo588,
 Mandy Zhang - mwz8,
 Sachin Thakrar - sbt29
 
-# Interactive Map Application
+## Interactive Map Application
 
 This interactive map application allows users to select tables, assign colors, and choose vibes for their selected table on an SVG map. The application consists of six main files that serve various functions in the project, from rendering the user interface to handling user interactions.
 
@@ -19,7 +20,7 @@ This interactive map application allows users to select tables, assign colors, a
 - `survey-check.html`: A modal page that confirms whether the user would like to do the end-of-flow survey
 - `survey.html`: The modal page used for all of the end-of-flow survey questions. The question element is swapped out depending on the question, though the responses are the same across questions (1-5).
 - `script.js`: Contains the JavaScript code that adds interactivity to the SVG map, handles event listeners, and manages user interactions through modal dialogs.
-- `cursor.js`: Contains the JavaScript code that controls the Kinect cursor. 
+- `cursor.js`: Contains the JavaScript code that controls the Kinect cursor.
 
 ## `script.js` Overview
 
@@ -52,8 +53,9 @@ The `script.js` file is the core of the application's functionality. Here's a br
 
 1. To run the website locally, a basic webserver is needed. This can be done by running `python3 -m http.server` in the main directory.
 2. Once this server is ran, open the provided localhost link. This server is needed to manage HTTP requests, but is _not_ a backend.
-3. Items can be selected through cursor hovering. The hover is currently set to 1.5 seconds, but may be adjusted. 
+3. Items can be selected through cursor hovering. The hover is currently set to 1.5 seconds, but may be adjusted.
 
 ## Bugs
+
 1. Sessions do not expire at the moment. The current session will last until the user refreshes their browser.
 2. The kinect cursor can be unpredictable, but this is due to the data provided to the site.

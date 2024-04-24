@@ -1,12 +1,11 @@
-document.addEventListener('DOMContentLoaded', function () {
-
+document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("map").addEventListener("load", function () {
         var host = "cpsc484-01.stdusr.yale.internal:8888";
         $(document).ready(function () {
             frames.start();
         });
 
-        const cursor = document.querySelector('.cursor');
+        const cursor = document.querySelector(".cursor");
 
         var frames = {
             socket: null,
@@ -20,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     if (command !== null) {
                         frames.update_cursor(command);
                     }
-                }
+                };
             },
 
             get_right_wrist_command: function (frame) {
@@ -29,12 +28,16 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
 
                 // Kinect observed values
-                const minX = -60, maxX = 200;
-                const minY = 0, maxY = 250;
+                const minX = -60,
+                    maxX = 200;
+                const minY = 0,
+                    maxY = 250;
 
                 // Screen resolution
-                const targetMinX = 0, targetMaxX = 1920;
-                const targetMinY = -1080, targetMaxY = 0;
+                const targetMinX = 0,
+                    targetMaxX = 1920;
+                const targetMinY = -1080,
+                    targetMaxY = 0;
 
                 // Normalize by subtracting the root (pelvis) joint coordinates
                 var pelvis = frame.people[0].joints[0];
@@ -42,16 +45,30 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 if (right_wrist.valid && pelvis.valid) {
                     // Normalise coordinates
-                    var normalizedX = ((pelvis.pixel.x - right_wrist.pixel.x - minX) * (targetMaxX - targetMinX)) / (maxX - minX) + targetMinX;
-                    var normalizedY = ((pelvis.pixel.y - right_wrist.pixel.y - minY) * (targetMaxY - targetMinY)) / (maxY - minY) + targetMinY;
+                    var normalizedX =
+                        ((pelvis.pixel.x - right_wrist.pixel.x - minX) *
+                            (targetMaxX - targetMinX)) /
+                            (maxX - minX) +
+                        targetMinX;
+                    var normalizedY =
+                        ((pelvis.pixel.y - right_wrist.pixel.y - minY) *
+                            (targetMaxY - targetMinY)) /
+                            (maxY - minY) +
+                        targetMinY;
 
                     // Ensure the normalised values are not outside bounds
-                    normalizedX = Math.max(targetMinX, Math.min(normalizedX, targetMaxX));
-                    normalizedY = Math.max(targetMinY, Math.min(normalizedY, targetMaxY));
+                    normalizedX = Math.max(
+                        targetMinX,
+                        Math.min(normalizedX, targetMaxX),
+                    );
+                    normalizedY = Math.max(
+                        targetMinY,
+                        Math.min(normalizedY, targetMaxY),
+                    );
 
                     return {
                         x: normalizedX,
-                        y: normalizedY
+                        y: normalizedY,
                     };
                 }
 
@@ -62,7 +79,7 @@ document.addEventListener('DOMContentLoaded', function () {
             update_cursor: function (result) {
                 cursor.style.bottom = `${result.y}px`;
                 cursor.style.left = `${result.x}px`;
-            }
-        }
+            },
+        };
     });
 });
