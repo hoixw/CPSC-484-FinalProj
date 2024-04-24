@@ -16,7 +16,10 @@ This interactive map application allows users to select tables, assign colors, a
 - `color-tables.html`: A modal page for displaying color options for the user to select for a particular table.
 - `confirmation.html`: A modal page that acts as a default confirmation page, where users can confirm their selections (used for both table selection and color confirmation).
 - `vibe.html`: Provides options for users to select a vibe for their chosen table. The vibe options influence the appearance of the table on the map.
+- `survey-check.html`: A modal page that confirms whether the user would like to do the end-of-flow survey
+- `survey.html`: The modal page used for all of the end-of-flow survey questions. The question element is swapped out depending on the question, though the responses are the same across questions (1-5).
 - `script.js`: Contains the JavaScript code that adds interactivity to the SVG map, handles event listeners, and manages user interactions through modal dialogs.
+- `cursor.js`: Contains the JavaScript code that controls the Kinect cursor. 
 
 ## `script.js` Overview
 
@@ -47,12 +50,10 @@ The `script.js` file is the core of the application's functionality. Here's a br
 
 ## How to Run
 
-1. Place all files in the same directory.
-2. Open `index.html` in a browser.
-3. Interact with the SVG map to select tables, assign colors, and set vibes.
-4. Hover is currently set to 1 second but may be adjusted
+1. To run the website locally, a basic webserver is needed. This can be done by running `python3 -m http.server` in the main directory.
+2. Once this server is ran, open the provided localhost link. This server is needed to manage HTTP requests, but is _not_ a backend.
+3. Items can be selected through cursor hovering. The hover is currently set to 1.5 seconds, but may be adjusted. 
 
 ## Bugs
-1. When a user selects "no" or "exit" on a confirmation page, we currently just exit the table join loop (we should handle this better).
-2. Sessions do not expire at the moment. The current session will last until the user refreshes their browser.
-3. Need to find a better way to link our cursor with the kinect.
+1. Sessions do not expire at the moment. The current session will last until the user refreshes their browser.
+2. The kinect cursor can be unpredictable, but this is due to the data provided to the site.

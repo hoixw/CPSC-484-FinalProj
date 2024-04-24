@@ -6,7 +6,9 @@ document.addEventListener('DOMContentLoaded', function () {
         const kinectCursorRefreshTime = 100;
         const mapObject = document.getElementById("map").contentDocument;
         const cursor = document.querySelector('.cursor');
-        let eventListeners = [];
+        const questions = ["How stressed are you feeling?", 
+        "How motivated do you feel?", 
+        "How much engagement in AKW have you done in the past?"];
         let intervals = [];
         let hoverTimers = {};
 
@@ -21,9 +23,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 rect1.top > rect2.bottom
             );
         }
-        
-        
-
 
         function addTableOutline(tableNum) {
             const tableOutline = mapObject.querySelector(`[data-outline="${tableNum}"]`);
@@ -131,6 +130,15 @@ document.addEventListener('DOMContentLoaded', function () {
             enableEventListeners(vibes, resolve);
         }
 
+        function enableSurveyCheckEventListeners(resolve) {
+            const buttons = ['yes', 'no', 'exit'];
+            enableEventListeners(buttons, resolve);
+        }
+
+        function enableSurveyEventListeners(resolve) {
+            const buttons = ['1', '2', '3', '4', '5', 'exit'];
+            enableEventListeners(buttons, resolve);
+        }
 
         function getTableMapFromLocalStorage() {
             const tableMapString = localStorage.getItem('tableMap');
@@ -223,6 +231,28 @@ document.addEventListener('DOMContentLoaded', function () {
                         hideModal();
                         storeTableMapInLocalStorage(tableMap);
                         updateSVGMap();
+
+                        const surveyCheckResponse = await showSurveyCheck();
+                        if (surveyCheckResponse !== 'yes') {
+                            console.log("Survey Not Chosen");
+                            hideModal();
+                            return;
+                        }
+
+                        hideModal();
+
+                        let responses = [];
+                        for await (const question of questions) {
+                            const response = await showSurveyQuestion(question);
+                            if (response === 'exit') {
+                                console.log("User exited survey");
+                                hideModal();
+                                return;
+                            }
+                            responses.push(response);
+                            hideModal();
+                        }
+                        console.log("Responses: ", responses);
                     }
                     else {
                         console.log("No available seats");
@@ -323,6 +353,35 @@ document.addEventListener('DOMContentLoaded', function () {
                         document.getElementById('modal-content').innerHTML = html;
 
                         enableVibeSelectionEventListeners(resolve);
+
+                        document.getElementById('modal').classList.remove('hidden');
+                    });
+            });
+        }
+
+        function showSurveyCheck() {
+            return new Promise((resolve, reject) => {
+                fetch('/survey-check.html')
+                    .then(response => response.text())
+                    .then(html => {
+                        document.getElementById('modal-content').innerHTML = html;
+
+                        enableSurveyCheckEventListeners(resolve);
+
+                        document.getElementById('modal').classList.remove('hidden');
+                    });
+            });
+        }
+
+        function showSurveyQuestion(question) {
+            return new Promise((resolve, reject) => {
+                fetch('/survey.html')
+                    .then(response => response.text())
+                    .then(html => {
+                        document.getElementById('modal-content').innerHTML = html;
+                        document.getElementById('question').textContent = `${question}`;
+
+                        enableSurveyEventListeners(resolve);
 
                         document.getElementById('modal').classList.remove('hidden');
                     });
