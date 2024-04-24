@@ -6,6 +6,10 @@ document.addEventListener('DOMContentLoaded', function () {
         const kinectCursorRefreshTime = 100;
         const mapObject = document.getElementById("map").contentDocument;
         const cursor = document.querySelector('.cursor');
+        const questions = ["How stressed are you feeling?", 
+        "How motivated do you feel?", 
+        "How much engagement in AKW have you done in the past?"];
+        let intervals = [];
         let hoverTimers = {};
 
         processSVGMap();
@@ -19,9 +23,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 rect1.top > rect2.bottom
             );
         }
-        
-        
-
 
         function addTableOutline(tableNum) {
             const tableOutline = mapObject.querySelector(`[data-outline="${tableNum}"]`);
@@ -63,176 +64,81 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
 
+        function enableEventListeners(elementIds, resolve) {
+            elementIds.forEach(elementId => {
+                const element = document.getElementById(elementId);
+        
+                // Code for mouse (to keep compatibility)
+                element.addEventListener('mouseenter', () => {
+                    if (hoverTimers[elementId]) {
+                        clearTimeout(hoverTimers[elementId]);
+                    }
+        
+                    hoverTimers[elementId] = setTimeout(() => {
+                        resolve(elementId);
+                    }, hoverSelectionTime);
+                });
+        
+                element.addEventListener('mouseleave', () => {
+                    if (hoverTimers[elementId]) {
+                        clearTimeout(hoverTimers[elementId]);
+                        hoverTimers[elementId] = null;
+                    }
+                });
+        
+                // Kinect cursor code
+                const intervalId =setInterval(() => {
+                    const cursorRect = cursor.getBoundingClientRect();
+                    const elementRect = element.getBoundingClientRect();
+        
+                    if (isOverlapping(cursorRect, elementRect)) {
+                        if (!element.classList.contains('hover')) {
+                            element.classList.add('hover');
+                            if (hoverTimers[elementId]) {
+                                clearTimeout(hoverTimers[elementId]);
+                            }
+                            hoverTimers[elementId] = setTimeout(() => {
+                                resolve(elementId);
+                            }, hoverSelectionTime);
+                        }
+                    } else {
+                        if (element.classList.contains('hover')) {
+                            element.classList.remove('hover');
+                            if (hoverTimers[elementId]) {
+                                clearTimeout(hoverTimers[elementId]);
+                                hoverTimers[elementId] = null;
+                            }
+                        }
+                    }
+                }, kinectCursorRefreshTime);
+                intervals.push(intervalId);
+            });
+        }
+        
         function enableColorSelectionEventListeners(resolve) {
             const colors = ['red', 'green', 'blue', 'yellow', 'purple', 'exit'];
-
-            // Code for mouse (to keep compatibility)
-            colors.forEach(colorId => {
-                const color = document.getElementById(colorId);
-
-                color.addEventListener('mouseenter', () => {
-                    if (hoverTimers[colorId]) {
-                        clearTimeout(hoverTimers[colorId]);
-                    }
-
-                    hoverTimers[colorId] = setTimeout(() => {
-                        resolve(colorId);
-                    }, hoverSelectionTime);
-                });
-
-                color.addEventListener('mouseleave', () => {
-                    if (hoverTimers[colorId]) {
-                        clearTimeout(hoverTimers[colorId]);
-                        hoverTimers[colorId] = null;
-                    }
-                });
-            });
-            
-            // Kinect cursor code
-            colors.forEach(colorId => {
-                const color = document.getElementById(colorId);
-        
-                setInterval(() => {
-                    const cursorRect = cursor.getBoundingClientRect();
-                    const colorRect = color.getBoundingClientRect();
-        
-                    if (isOverlapping(cursorRect, colorRect)) {
-                        if (!color.classList.contains('hover')) {
-                            color.classList.add('hover');
-                            if (hoverTimers[colorId]) {
-                                clearTimeout(hoverTimers[colorId]);
-                            }
-                            hoverTimers[colorId] = setTimeout(() => {
-                                resolve(colorId);
-                            }, hoverSelectionTime);
-                        }
-                    } else {
-                        if (color.classList.contains('hover')) {
-                            color.classList.remove('hover');
-                            if (hoverTimers[colorId]) {
-                                clearTimeout(hoverTimers[colorId]);
-                                hoverTimers[colorId] = null;
-                            }
-                        }
-                    }
-                }, kinectCursorRefreshTime);
-            });
+            enableEventListeners(colors, resolve);
         }
-
-
+        
         function enableConfirmationEventListeners(resolve) {
             const buttons = ['yes', 'no', 'exit'];
-            
-            // Code for mouse (to keep compatibility)
-            buttons.forEach(buttonId => {
-                const button = document.getElementById(buttonId);
-
-                button.addEventListener('mouseenter', () => {
-                    if (hoverTimers[buttonId]) {
-                        clearTimeout(hoverTimers[buttonId]);
-                    }
-
-                    hoverTimers[buttonId] = setTimeout(() => {
-                        resolve(buttonId);
-                    }, hoverSelectionTime);
-                });
-
-                button.addEventListener('mouseleave', () => {
-                    if (hoverTimers[buttonId]) {
-                        clearTimeout(hoverTimers[buttonId]);
-                        hoverTimers[buttonId] = null;
-                    }
-                });
-            });
-
-            // Kinect cursor code
-            buttons.forEach(buttonId => {
-                const button = document.getElementById(buttonId);
-        
-                setInterval(() => {
-                    const cursorRect = cursor.getBoundingClientRect();
-                    const buttonRect = button.getBoundingClientRect();
-        
-                    if (isOverlapping(cursorRect, buttonRect)) {
-                        if (!button.classList.contains('hover')) {
-                            button.classList.add('hover');
-                            if (hoverTimers[buttonId]) {
-                                clearTimeout(hoverTimers[buttonId]);
-                            }
-                            hoverTimers[buttonId] = setTimeout(() => {
-                                resolve(buttonId);
-                            }, hoverSelectionTime);
-                        }
-                    } else {
-                        if (button.classList.contains('hover')) {
-                            button.classList.remove('hover');
-                            if (hoverTimers[buttonId]) {
-                                clearTimeout(hoverTimers[buttonId]);
-                                hoverTimers[buttonId] = null;
-                            }
-                        }
-                    }
-                }, kinectCursorRefreshTime);
-            })
+            enableEventListeners(buttons, resolve);
         }
-
-
+        
         function enableVibeSelectionEventListeners(resolve) {
-            const vibe = ['relaxed', 'focused', 'exit'];
-            
-            // Code for mouse (to keep compatibility)
-            vibe.forEach(vibeId => {
-                const vibe = document.getElementById(vibeId);
-
-                vibe.addEventListener('mouseenter', () => {
-                    if (hoverTimers[vibeId]) {
-                        clearTimeout(hoverTimers[vibeId]);
-                    }
-
-                    hoverTimers[vibeId] = setTimeout(() => {
-                        resolve(vibeId);
-                    }, hoverSelectionTime);
-                });
-
-                vibe.addEventListener('mouseleave', () => {
-                    if (hoverTimers[vibeId]) {
-                        clearTimeout(hoverTimers[vibeId]);
-                        hoverTimers[vibeId] = null;
-                    }
-                });
-            });
-
-            // Kinect cursor code
-            vibe.forEach(vibeId => {
-                const vibe = document.getElementById(vibeId);
-        
-                setInterval(() => {
-                    const cursorRect = cursor.getBoundingClientRect();
-                    const vibeRect = vibe.getBoundingClientRect();
-        
-                    if (isOverlapping(cursorRect, vibeRect)) {
-                        if (!vibe.classList.contains('hover')) {
-                            vibe.classList.add('hover');
-                            if (hoverTimers[vibeId]) {
-                                clearTimeout(hoverTimers[vibeId]);
-                            }
-                            hoverTimers[vibeId] = setTimeout(() => {
-                                resolve(vibeId);
-                            }, hoverSelectionTime);
-                        }
-                    } else {
-                        if (vibe.classList.contains('hover')) {
-                            vibe.classList.remove('hover');
-                            if (hoverTimers[vibeId]) {
-                                clearTimeout(hoverTimers[vibeId]);
-                                hoverTimers[vibeId] = null;
-                            }
-                        }
-                    }
-                }, 100);
-            });
+            const vibes = ['relaxed', 'focused', 'exit'];
+            enableEventListeners(vibes, resolve);
         }
 
+        function enableSurveyCheckEventListeners(resolve) {
+            const buttons = ['yes', 'no', 'exit'];
+            enableEventListeners(buttons, resolve);
+        }
+
+        function enableSurveyEventListeners(resolve) {
+            const buttons = ['1', '2', '3', '4', '5', 'exit'];
+            enableEventListeners(buttons, resolve);
+        }
 
         function getTableMapFromLocalStorage() {
             const tableMapString = localStorage.getItem('tableMap');
@@ -296,12 +202,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
                         tableInfo.vibe = vibeSelectionResponse;
 
-                        hideModal();
-
                         let responseFromColorSelection = null;
                         let colorSelectionResponse = null;
 
                         while (colorSelectionResponse !== 'yes') {
+                            hideModal();
                             responseFromColorSelection = await showColorSelection();
 
                             if (responseFromColorSelection === 'exit') {
@@ -309,19 +214,45 @@ document.addEventListener('DOMContentLoaded', function () {
                                 hideModal();
                                 return;
                             }
-
+                            
+                            hideModal();
                             colorSelectionResponse = await showConfirmation("Color:", (responseFromColorSelection.charAt(0).toUpperCase() + responseFromColorSelection.slice(1)));
 
                             if (colorSelectionResponse === 'no') {
                                 console.log("Color not confirmed, prompting again");
+                            } else if (colorSelectionResponse === 'exit') {
+                                console.log("Exit selected");
+                                hideModal();
+                                return;
                             }
                         }
 
                         seat.color = responseFromColorSelection;
-
                         hideModal();
                         storeTableMapInLocalStorage(tableMap);
                         updateSVGMap();
+
+                        const surveyCheckResponse = await showSurveyCheck();
+                        if (surveyCheckResponse !== 'yes') {
+                            console.log("Survey Not Chosen");
+                            hideModal();
+                            return;
+                        }
+
+                        hideModal();
+
+                        let responses = [];
+                        for await (const question of questions) {
+                            const response = await showSurveyQuestion(question);
+                            if (response === 'exit') {
+                                console.log("User exited survey");
+                                hideModal();
+                                return;
+                            }
+                            responses.push(response);
+                            hideModal();
+                        }
+                        console.log("Responses: ", responses);
                     }
                     else {
                         console.log("No available seats");
@@ -333,6 +264,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
         function hideModal() {
             document.getElementById('modal').classList.add('hidden');
+            intervals.forEach(intervalId => {
+                clearInterval(intervalId);
+            });
+            intervals = [];
         }
 
 
@@ -418,6 +353,35 @@ document.addEventListener('DOMContentLoaded', function () {
                         document.getElementById('modal-content').innerHTML = html;
 
                         enableVibeSelectionEventListeners(resolve);
+
+                        document.getElementById('modal').classList.remove('hidden');
+                    });
+            });
+        }
+
+        function showSurveyCheck() {
+            return new Promise((resolve, reject) => {
+                fetch('/survey-check.html')
+                    .then(response => response.text())
+                    .then(html => {
+                        document.getElementById('modal-content').innerHTML = html;
+
+                        enableSurveyCheckEventListeners(resolve);
+
+                        document.getElementById('modal').classList.remove('hidden');
+                    });
+            });
+        }
+
+        function showSurveyQuestion(question) {
+            return new Promise((resolve, reject) => {
+                fetch('/survey.html')
+                    .then(response => response.text())
+                    .then(html => {
+                        document.getElementById('modal-content').innerHTML = html;
+                        document.getElementById('question').textContent = `${question}`;
+
+                        enableSurveyEventListeners(resolve);
 
                         document.getElementById('modal').classList.remove('hidden');
                     });
