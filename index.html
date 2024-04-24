@@ -1,24 +1,95 @@
 <!doctype html>
 <html>
+    <head>
+        <title>Seat and Table Selection</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <script src="js/script.js"></script>
+        <script src="js/cursor.js"></script>
+    </head>
 
-<head>
-    <title>Seat and Table Selection</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script src="js/script.js"></script>
-    <script src="js/cursor.js"></script>
-</head>
+    <body class="bg-gray-100 m-0 p-0">
+        <div
+            class="cursor h-5 w-5"
+            style="position: relative; bottom: 0; z-index: 9999"
+        >
+            <object
+                data="assets/cursor.svg"
+                type="image/svg+xml"
+                class="w-full h-auto"
+            ></object>
+        </div>
+        <div class="flex">
+            <div class="w-[10%] h-screen flex justify-center items-center">
+                <object
+                    data="assets/man.svg"
+                    type="image/svg+xml"
+                    class="w-[3/4] h-auto"
+                ></object>
+            </div>
+            <div
+                class="w-[72.5%] h-screen flex flex-col justify-center items-center px-5"
+            >
+                <div class="text-7xl font-bold font-mono mb-10 text-blue-900">
+                    Group Work Sessions!
+                </div>
+                <object
+                    data="assets/map.svg"
+                    type="image/svg+xml"
+                    id="map"
+                    class="w-full"
+                ></object>
+                <div class="text-4xl font-bold font-mono mt-10 text-blue-900">
+                    Use your right hand to control the cursor,
+                </div>
+                <div class="text-4xl font-bold font-mono text-blue-900">
+                    and hover over something to select it!
+                </div>
+            </div>
 
-<body class="bg-gray-100 m-0 p-0" style="overflow: hidden;">
-    <div class="cursor h-5 w-5" style="position: relative; bottom: 0; z-index: 9999">
-        <object data="assets/cursor.svg" type="image/svg+xml" class="w-full h-auto"></object>
-    </div>
-    <div>
-        <object data="assets/map.svg" type="image/svg+xml" id="map" class="w-full"></object>
-    </div>
+            <div
+                class="w-[17.5%] h-screen flex flex-col justify-center items-center"
+            >
+                <div class="text-5xl font-bold font-mono mb-4 text-blue-900">
+                    Key:
+                </div>
+                <div class="border-4 border-black p-8">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-10 h-10 bg-gray-400 rounded-full"></div>
+                        <span class="text-gray-700 text-2xl font-mono"
+                            >Unoccupied</span
+                        >
+                    </div>
+                    <div class="flex items-center space-x-4 mt-4">
+                        <div class="w-10 h-10">
+                            <img
+                                src="assets/focused.svg"
+                                alt="Focused vibe"
+                                class="w-full h-full"
+                            />
+                        </div>
+                        <span class="text-gray-700 text-2xl font-mono"
+                            >Focused vibe</span
+                        >
+                    </div>
+                    <div class="flex items-center space-x-4 mt-4">
+                        <div class="w-10 h-10">
+                            <img
+                                src="assets/relaxed.svg"
+                                alt="Relaxed vibe"
+                                class="w-full h-full"
+                            />
+                        </div>
+                        <span class="text-gray-700 text-2xl font-mono"
+                            >Relaxed vibe</span
+                        >
+                    </div>
+                </div>
+            </div>
+        </div>
 
-    <!-- 
+        <!-- 
     <div class="container py-8 grid grid-cols-12 gap-0 h-screen">
         <div class="col-start-1 col-end-3 flex justify-center items-center bg-pink-100">
             <object data="assets/man.svg" type="image/svg+xml"></object>
@@ -31,10 +102,15 @@
     </div>
     -->
 
-    <!-- Modal placeholder -->
-    <div id="modal" class="hidden fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center">
-        <div id="modal-content" class="bg-white p-4 rounded-lg shadow-lg"></div>
-    </div>
-</body>
-
+        <!-- Modal placeholder -->
+        <div
+            id="modal"
+            class="hidden fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center"
+        >
+            <div
+                id="modal-content"
+                class="bg-white p-4 rounded-lg shadow-lg"
+            ></div>
+        </div>
+    </body>
 </html>
