@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", function () {
         let ENABLEKINECT = true;
         let intervals = [];
         let hoverTimers = {};
+        let userFlowTimer = null;
 
         processSVGMap();
         enableMapEventListeners();
@@ -172,6 +173,13 @@ document.addEventListener("DOMContentLoaded", function () {
                     const seat = tableInfo.seats.find((seat) => !seat.isOccupied);
 
                     if (seat) {
+                        // Time out user flow if they are in it for 5 minutes
+                        userFlowTimer = setTimeout(() => {
+                            console.log("User flow timed out");
+                            hideModal();
+                            return;
+                        }, 5 * 60 * 1000);
+
                         const tableSelectionResponse = await showConfirmation(
                             "Table:",
                             tableNum,
@@ -183,6 +191,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         } else {
                             console.log("No or exit selected");
                             hideModal();
+                            clearTimeout(userFlowTimer);
                             return;
                         }
 
@@ -196,6 +205,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             if (vibeSelectionResponse === "exit") {
                                 console.log("Exit selected");
                                 hideModal();
+                                clearTimeout(userFlowTimer);
                                 return;
                             }
                         }
@@ -212,6 +222,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             if (responseFromColorSelection === "exit") {
                                 console.log("Exit selected");
                                 hideModal();
+                                clearTimeout(userFlowTimer);
                                 return;
                             }
 
@@ -227,6 +238,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             } else if (colorSelectionResponse === "exit") {
                                 console.log("Exit selected");
                                 hideModal();
+                                clearTimeout(userFlowTimer);
                                 return;
                             }
                         }
@@ -240,6 +252,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         if (surveyCheckResponse !== "yes") {
                             console.log("Survey Not Chosen");
                             hideModal();
+                            clearTimeout(userFlowTimer);
                             return;
                         }
 
@@ -251,6 +264,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         if (questionOneResponse === "exit") {
                             console.log("Exit selected");
                             hideModal();
+                            clearTimeout(userFlowTimer);
                             return;
                         } else {
                             console.log("Survey question one answered");
@@ -262,6 +276,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         if (questionTwoResponse === "exit") {
                             console.log("Exit selected");
                             hideModal();
+                            clearTimeout(userFlowTimer);
                             return;
                         } else {
                             console.log("Survey question two answered");
@@ -281,6 +296,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             },
                             body: JSON.stringify(surveyData),
                         });
+                        clearTimeout(userFlowTimer);
                     } else {
                         console.log("No available seats");
                     }
