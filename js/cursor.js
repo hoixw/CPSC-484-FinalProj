@@ -23,9 +23,7 @@ document.addEventListener("DOMContentLoaded", function () {
             },
 
             get_right_wrist_command: function (frame) {
-                if (frame.people.length < 1) {
-                    return null;
-                }
+                let person = frame.people[0];
 
                 // Kinect observed values
                 const minX = -60,
@@ -39,9 +37,34 @@ document.addEventListener("DOMContentLoaded", function () {
                 const targetMinY = -1080,
                     targetMaxY = 0;
 
+                const centerX = (minX + maxX) / 2;
+                const centerY = (minY + maxY) / 2;
+
+                
+                if (frame.people.length < 1) {
+                    return null;
+                } else if (frame.people.length > 1) {
+                    let minDistance = Infinity;
+                    for (let i = 0; i < frame.people.length; i++) {
+                        const curPerson = frame.people[i];
+                        const pelvis = curPerson.joints[0];
+
+                        if (pelvis.valid) {
+                            const distanceX = pelvis.pixel.x - centerX;
+                            const distanceY = pelvis.pixel.y - centerY;
+                            const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+
+                            if (distance < minDistance) {
+                                minDistance = distance;
+                                person = curPerson;
+                            }
+                        }
+                    }
+                }
+
                 // Normalize by subtracting the root (pelvis) joint coordinates
-                var pelvis = frame.people[0].joints[0];
-                var right_wrist = frame.people[0].joints[14];
+                var pelvis = person.joints[0];
+                var right_wrist = person.joints[14];
 
                 if (right_wrist.valid && pelvis.valid) {
                     // Normalise coordinates

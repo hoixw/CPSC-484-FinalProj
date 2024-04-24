@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 hover.addEventListener("mouseleave", handleTableUnhover);
 
                 // For Kinect Cursor compatibility
-                setInterval(() => {
+                const intervalId = setInterval(() => {
                     if (document.getElementById("modal").classList.contains("hidden")) {
                         const cursorRect = cursor.getBoundingClientRect();
                         const hoverRect = hover.getBoundingClientRect();
@@ -57,6 +57,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         }
                     }
                 }, kinectCursorRefreshTime);
+                intervals.push(intervalId);
             });
         }
 
@@ -179,6 +180,9 @@ document.addEventListener("DOMContentLoaded", function () {
                             hideModal();
                             return;
                         }, 5 * 60 * 1000);
+                        intervals.forEach((intervalId) => {
+                            clearInterval(intervalId);
+                        });
 
                         const tableSelectionResponse = await showConfirmation(
                             "Table:",
@@ -191,7 +195,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         } else {
                             console.log("No or exit selected");
                             hideModal();
-                            clearTimeout(userFlowTimer);
+                            closeModal();
                             return;
                         }
 
@@ -205,7 +209,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             if (vibeSelectionResponse === "exit") {
                                 console.log("Exit selected");
                                 hideModal();
-                                clearTimeout(userFlowTimer);
+                                closeModal();
                                 return;
                             }
                         }
@@ -222,7 +226,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             if (responseFromColorSelection === "exit") {
                                 console.log("Exit selected");
                                 hideModal();
-                                clearTimeout(userFlowTimer);
+                                closeModal();
                                 return;
                             }
 
@@ -238,7 +242,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             } else if (colorSelectionResponse === "exit") {
                                 console.log("Exit selected");
                                 hideModal();
-                                clearTimeout(userFlowTimer);
+                                closeModal();
                                 return;
                             }
                         }
@@ -252,7 +256,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         if (surveyCheckResponse !== "yes") {
                             console.log("Survey Not Chosen");
                             hideModal();
-                            clearTimeout(userFlowTimer);
+                            closeModal();
                             return;
                         }
 
@@ -264,7 +268,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         if (questionOneResponse === "exit") {
                             console.log("Exit selected");
                             hideModal();
-                            clearTimeout(userFlowTimer);
+                            closeModal();
                             return;
                         } else {
                             console.log("Survey question one answered");
@@ -276,7 +280,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         if (questionTwoResponse === "exit") {
                             console.log("Exit selected");
                             hideModal();
-                            clearTimeout(userFlowTimer);
+                            closeModal();
                             return;
                         } else {
                             console.log("Survey question two answered");
@@ -296,7 +300,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             },
                             body: JSON.stringify(surveyData),
                         });
-                        clearTimeout(userFlowTimer);
+                        closeModal();
                     } else {
                         console.log("No available seats");
                     }
@@ -310,6 +314,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 clearInterval(intervalId);
             });
             intervals = [];
+        }
+
+        function closeModal() {
+            clearTimeout(userFlowTimer);
+            enableMapEventListeners();
         }
 
         function processSVGMap() {
@@ -361,7 +370,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         function showColorSelection() {
             return new Promise((resolve, reject) => {
-                fetch("/pages/colors.html")
+                fetch("pages/colors.html")
                     .then((response) => response.text())
                     .then((html) => {
                         document.getElementById("modal-content").innerHTML = html;
@@ -375,7 +384,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         function showConfirmation(prompt, confirmData) {
             return new Promise((resolve, reject) => {
-                fetch("/pages/confirmation.html")
+                fetch("pages/confirmation.html")
                     .then((response) => response.text())
                     .then((html) => {
                         document.getElementById("modal-content").innerHTML = html;
@@ -391,7 +400,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         function showSurveyCheck() {
             return new Promise((resolve, reject) => {
-                fetch("/pages/survey-check.html")
+                fetch("pages/survey-check.html")
                     .then((response) => response.text())
                     .then((html) => {
                         document.getElementById("modal-content").innerHTML = html;
@@ -405,7 +414,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         function showSurveyQuestionOne() {
             return new Promise((resolve, reject) => {
-                fetch("/pages/survey-one.html")
+                fetch("pages/survey-one.html")
                     .then((response) => response.text())
                     .then((html) => {
                         document.getElementById("modal-content").innerHTML = html;
@@ -419,7 +428,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         function showSurveyQuestionTwo() {
             return new Promise((resolve, reject) => {
-                fetch("/pages/survey-two.html")
+                fetch("pages/survey-two.html")
                     .then((response) => response.text())
                     .then((html) => {
                         document.getElementById("modal-content").innerHTML = html;
@@ -433,7 +442,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         function showVibeSelection() {
             return new Promise((resolve, reject) => {
-                fetch("/pages/vibe.html")
+                fetch("pages/vibe.html")
                     .then((response) => response.text())
                     .then((html) => {
                         document.getElementById("modal-content").innerHTML = html;
