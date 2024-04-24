@@ -145,11 +145,6 @@ document.addEventListener('DOMContentLoaded', function () {
             enableEventListeners(answers, resolve);
         }
 
-        function enableSurveyCheckEventListeners(resolve) {
-            const buttons = ['yes', 'no', 'exit'];
-            enableEventListeners(buttons, resolve);
-        }
-
         function getTableMapFromLocalStorage() {
             const tableMapString = localStorage.getItem('tableMap');
             return tableMapString ? JSON.parse(tableMapString) : {};
@@ -193,7 +188,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         else {
                             console.log("No or exit selected");
                             hideModal();
-                            return
+                            return;
                         }
 
                         hideModal();
@@ -206,7 +201,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             if (vibeSelectionResponse === 'exit') {
                                 console.log("Exit selected");
                                 hideModal();
-                                return
+                                return;
                             }
                         }
 
@@ -252,24 +247,24 @@ document.addEventListener('DOMContentLoaded', function () {
                         hideModal();
 
                         // After the user is done selecting a seat then we will initiate the survey
-                        questionOneResponse = await showSurveyQuestionOne();
+                        const questionOneResponse = await showSurveyQuestionOne();
 
                         if (questionOneResponse === 'exit') {
                             console.log("Exit selected");
                             hideModal();
-                            return
+                            return;
                         }
                         else {
                             console.log("Survey question one answered");
                             hideModal();
                         }
 
-                        questionTwoResponse = await showSurveyQuestionTwo();
+                        const questionTwoResponse = await showSurveyQuestionTwo();
 
                         if (questionTwoResponse === 'exit') {
                             console.log("Exit selected");
                             hideModal();
-                            return
+                            return;
                         }
                         else {
                             console.log("Survey question two answered");
@@ -288,7 +283,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                 'Content-Type': 'application/json',
                             },
                             body: JSON.stringify(surveyData),
-                        })
+                        });
 
                     }
                     else {
@@ -437,20 +432,6 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         }
 
-        function showSurveyCheck() {
-            return new Promise((resolve, reject) => {
-                fetch('/survey-check.html')
-                    .then(response => response.text())
-                    .then(html => {
-                        document.getElementById('modal-content').innerHTML = html;
-
-                        enableSurveyCheckEventListeners(resolve);
-
-                        document.getElementById('modal').classList.remove('hidden');
-                    });
-            });
-        }
-
 
         function storeTableMapInLocalStorage(tableMap) {
             localStorage.setItem('tableMap', JSON.stringify(tableMap));
@@ -467,7 +448,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
         function updateSVGMap() {
-            tableMap = getTableMapFromLocalStorage();
+            const tableMap = getTableMapFromLocalStorage();
 
             for (const tableID in tableMap) {
                 const tableData = tableMap[tableID];
