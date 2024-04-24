@@ -1,14 +1,11 @@
 document.addEventListener('DOMContentLoaded', function () {
 
     document.getElementById("map").addEventListener("load", function () {
-
+    
         const hoverSelectionTime = 1500;
         const kinectCursorRefreshTime = 100;
         const mapObject = document.getElementById("map").contentDocument;
         const cursor = document.querySelector('.cursor');
-        const questions = ["How stressed are you feeling?", 
-        "How motivated do you feel?", 
-        "How much engagement in AKW have you done in the past?"];
         let intervals = [];
         let hoverTimers = {};
 
@@ -36,12 +33,17 @@ document.addEventListener('DOMContentLoaded', function () {
         function enableMapEventListeners() {
             const tableHovers = mapObject.querySelectorAll("[data-hover]");
             tableHovers.forEach(hover => {
+
+                // Code for mouse (to keep compatibility)
+                hover.addEventListener("mouseenter", handleTableHover);
+                hover.addEventListener("mouseleave", handleTableUnhover);
+                
                 // For Kinect Cursor compatibility
                 setInterval(() => {
                     if (document.getElementById('modal').classList.contains('hidden')) {
                         const cursorRect = cursor.getBoundingClientRect();
                         const hoverRect = hover.getBoundingClientRect();
-            
+
                         if (isOverlapping(cursorRect, hoverRect)) {
                             if (!hover.classList.contains('hover')) {
                                 hover.classList.add('hover');
@@ -55,10 +57,6 @@ document.addEventListener('DOMContentLoaded', function () {
                         }
                     }
                 }, kinectCursorRefreshTime);
-
-                // Code for mouse (to keep compatibility)
-                hover.addEventListener("mouseenter", handleTableHover);
-                hover.addEventListener("mouseleave", handleTableUnhover);
 
             });
         }
@@ -128,6 +126,21 @@ document.addEventListener('DOMContentLoaded', function () {
         function enableVibeSelectionEventListeners(resolve) {
             const vibes = ['relaxed', 'focused', 'exit'];
             enableEventListeners(vibes, resolve);
+        }
+
+        function enableSurveyCheckEventListeners(resolve) {
+            const buttons = ['yes', 'no', 'exit'];
+            enableEventListeners(buttons, resolve);
+        }
+
+        function enableSurveyOneEventListeners(resolve) {
+            const answers = ['not-motivated', 'neutral', 'motivated', 'exit', 'skip'];
+            enableEventListeners(answers, resolve);
+        }
+
+        function enableSurveyTwoEventListeners(resolve) {
+            const answers = ['never', 'sometimes', 'always', 'exit', 'skip'];
+            enableEventListeners(answers, resolve);
         }
 
         function enableSurveyCheckEventListeners(resolve) {
@@ -241,18 +254,45 @@ document.addEventListener('DOMContentLoaded', function () {
 
                         hideModal();
 
-                        let responses = [];
-                        for await (const question of questions) {
-                            const response = await showSurveyQuestion(question);
-                            if (response === 'exit') {
-                                console.log("User exited survey");
-                                hideModal();
-                                return;
-                            }
-                            responses.push(response);
+                        // After the user is done selecting a seat then we will initiate the survey
+                        questionOneResponse = await showSurveyQuestionOne();
+
+                        if (questionOneResponse === 'exit') {
+                            console.log("Exit selected");
+                            hideModal();
+                            return
+                        }
+                        else {
+                            console.log("Survey question one answered");
                             hideModal();
                         }
-                        console.log("Responses: ", responses);
+
+                        questionTwoResponse = await showSurveyQuestionTwo();
+
+                        if (questionTwoResponse === 'exit') {
+                            console.log("Exit selected");
+                            hideModal();
+                            return
+                        }
+                        else {
+                            console.log("Survey question two answered");
+                            hideModal();
+                        }
+
+                        const surveyData = {
+                            "Time": new Date().toLocaleString(),
+                            "Question 1": questionOneResponse,
+                            "Question 2": questionTwoResponse
+                        };
+
+                        fetch('https://api.sheetmonkey.io/form/jNZkAkg7RgYWtZWzv1JVEY', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(surveyData),
+                        })
+
                     }
                     else {
                         console.log("No available seats");
@@ -269,7 +309,6 @@ document.addEventListener('DOMContentLoaded', function () {
             });
             intervals = [];
         }
-
 
         function processSVGMap() {
             let tableMap = {};
@@ -316,7 +355,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         function showColorSelection() {
             return new Promise((resolve, reject) => {
-                fetch('/color-tables.html')
+                fetch('/colors.html')
                     .then(response => response.text())
                     .then(html => {
                         document.getElementById('modal-content').innerHTML = html;
@@ -344,6 +383,48 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         }
 
+        function showSurveyCheck() {
+            return new Promise((resolve, reject) => {
+                fetch('/survey-check.html')
+                    .then(response => response.text())
+                    .then(html => {
+                        document.getElementById('modal-content').innerHTML = html;
+
+                        enableSurveyCheckEventListeners(resolve);
+
+                        document.getElementById('modal').classList.remove('hidden');
+                    });
+            });
+        }
+
+        
+        function showSurveyQuestionOne() {
+            return new Promise((resolve, reject) => {
+                fetch('/survey-one.html')
+                    .then(response => response.text())
+                    .then(html => {
+                        document.getElementById('modal-content').innerHTML = html;
+
+                        enableSurveyOneEventListeners(resolve);
+
+                        document.getElementById('modal').classList.remove('hidden');
+                    });
+            });
+        }
+
+        function showSurveyQuestionTwo() {
+            return new Promise((resolve, reject) => {
+                fetch('/survey-two.html')
+                    .then(response => response.text())
+                    .then(html => {
+                        document.getElementById('modal-content').innerHTML = html;
+
+                        enableSurveyTwoEventListeners(resolve);
+
+                        document.getElementById('modal').classList.remove('hidden');
+                    });
+            });
+        }
 
         function showVibeSelection() {
             return new Promise((resolve, reject) => {
@@ -434,5 +515,4 @@ document.addEventListener('DOMContentLoaded', function () {
 
         setInterval(updateSVGMap, 5000);
     });
-
 });
