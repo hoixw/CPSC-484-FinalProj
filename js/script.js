@@ -314,6 +314,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
                             if (colorSelectionResponse === 'no') {
                                 console.log("Color not confirmed, prompting again");
+                            } else if (colorSelectionResponse === 'exit') {
+                                console.log("Exit selected");
+                                hideModal();
+                                return;
                             }
                         }
 
