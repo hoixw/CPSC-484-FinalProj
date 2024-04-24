@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     document.getElementById("map").addEventListener("load", function () {
 
-        const hoverSelectionTime = 1000;
+        const hoverSelectionTime = 1500;
         const kinectCursorRefreshTime = 100;
         const mapObject = document.getElementById("map").contentDocument;
         const cursor = document.querySelector('.cursor');
@@ -298,26 +298,26 @@ document.addEventListener('DOMContentLoaded', function () {
 
                         hideModal();
 
-                        const responseFromColorSelection = await showColorSelection();
+                        let responseFromColorSelection = null;
+                        let colorSelectionResponse = null;
 
-                        if (responseFromColorSelection === 'exit') {
-                            console.log("Exit selected");
-                            hideModal();
-                            return
+                        while (colorSelectionResponse !== 'yes') {
+                            responseFromColorSelection = await showColorSelection();
+
+                            if (responseFromColorSelection === 'exit') {
+                                console.log("Exit selected");
+                                hideModal();
+                                return;
+                            }
+
+                            colorSelectionResponse = await showConfirmation("Color:", (responseFromColorSelection.charAt(0).toUpperCase() + responseFromColorSelection.slice(1)));
+
+                            if (colorSelectionResponse === 'no') {
+                                console.log("Color not confirmed, prompting again");
+                            }
                         }
 
-                        hideModal();
-
-                        const colorSelectionResponse = await showConfirmation("Color:", responseFromColorSelection);
-
-                        if (colorSelectionResponse === 'yes') {
-                            seat.color = responseFromColorSelection;
-                        }
-                        else {
-                            console.log("No or exit selected");
-                            hideModal();
-                            return
-                        }
+                        seat.color = responseFromColorSelection;
 
                         hideModal();
                         storeTableMapInLocalStorage(tableMap);

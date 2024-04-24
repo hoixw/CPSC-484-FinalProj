@@ -9,24 +9,23 @@
 </head>
 
 <body class="bg-gray-50 flex flex-col items-center justify-center min-h-screen py-12">
-    <div class="absolute top-0 left-0 m-4">
-        <div id="exit" class="bg-red-500 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-md shadow hover:shadow-md transition duration-150 ease-in-out cursor-pointer">
+    <div class="fixed top-0 left-0 m-4">
+        <div id="exit" class="w-40 h-20 bg-red-500 hover:bg-red-700 text-2xl text-white font-bold rounded hover:cursor-pointer flex items-center justify-center">
             Exit
         </div>
     </div>
-    <p class="text-3xl font-semibold mb-10 text-center">Looks like you’re starting a session, select your study preference</p>
+    <p class="text-3xl mb-4 mt-4 text-center">Looks like you’re starting a session!</p>
+    <p class="text-4xl mb-8 text-center font-bold">Select your study preference:</p>
     <div class="flex space-x-6 items-center justify-center">
         <div id="relaxed"
-            class="bg-yellow-500 hover:bg-yellow-700 text-white font-semibold py-3 px-6 rounded-lg shadow hover:shadow-lg transition duration-150 ease-in-out cursor-pointer">
+        class="w-64 h-24 bg-[#14b8a6] hover:bg-[#0f766e] text-2xl text-white font-bold rounded hover:cursor-pointer flex items-center justify-center">
             Relaxed
         </div>
         <div id="focused"
-            class="bg-green-500 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-lg shadow hover:shadow-lg transition duration-150 ease-in-out cursor-pointer">
+        class="w-64 h-24 bg-purple-500 hover:bg-purple-700 text-2xl text-white font-bold rounded hover:cursor-pointer flex items-center justify-center">
             Focused
         </div>
     </div>
-    <br>
-    <p class="text-3xl font-semibold mb-8 text-center">Hover your hand to select a focused or relaxed vibe</p>
 </body>
 
 </html>

@@ -13,7 +13,6 @@ This interactive map application allows users to select tables, assign colors, a
 ## Files Description
 
 - `index.html`: Serves as the entry point of the application. It provides the initial user interface and loads the interactive SVG map.
-- `color-confirmation.html`: A modal page used for confirming the color selection for a table.
 - `color-tables.html`: A modal page for displaying color options for the user to select for a particular table.
 - `confirmation.html`: A modal page that acts as a default confirmation page, where users can confirm their selections (used for both table selection and color confirmation).
 - `vibe.html`: Provides options for users to select a vibe for their chosen table. The vibe options influence the appearance of the table on the map.
