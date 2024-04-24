@@ -22,13 +22,13 @@ document.addEventListener("DOMContentLoaded", function () {
         const centerX = (minX + maxX) / 2;
         const centerY = (minY + maxY) / 2;
 
-        targetX = 0;
-        targetY = 0;
+        var targetX = 0;
+        var targetY = 0;
 
-        currentX = 0;
-        currentY = 0;
+        var currentX = 0;
+        var currentY = 0;
 
-        smoothing = 0.05;
+        var smoothing = 0.05;
 
         function boundsCheck(x, y) {
             normalizedX = Math.max(
