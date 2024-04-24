@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const kinectCursorRefreshTime = 100;
         const mapObject = document.getElementById("map").contentDocument;
         const cursor = document.querySelector('.cursor');
+        let ENABLEKINECT = true;
         let intervals = [];
         let hoverTimers = {};
 
@@ -84,32 +85,33 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                 });
         
-                // Kinect cursor code
-                const intervalId =setInterval(() => {
-                    const cursorRect = cursor.getBoundingClientRect();
-                    const elementRect = element.getBoundingClientRect();
-        
-                    if (isOverlapping(cursorRect, elementRect)) {
-                        if (!element.classList.contains('hover')) {
-                            element.classList.add('hover');
-                            if (hoverTimers[elementId]) {
-                                clearTimeout(hoverTimers[elementId]);
+                if (ENABLEKINECT) {
+                    const intervalId = setInterval(() => {
+                        const cursorRect = cursor.getBoundingClientRect();
+                        const elementRect = element.getBoundingClientRect();
+            
+                        if (isOverlapping(cursorRect, elementRect)) {
+                            if (!element.classList.contains('hover')) {
+                                element.classList.add('hover');
+                                if (hoverTimers[elementId]) {
+                                    clearTimeout(hoverTimers[elementId]);
+                                }
+                                hoverTimers[elementId] = setTimeout(() => {
+                                    resolve(elementId);
+                                }, hoverSelectionTime);
                             }
-                            hoverTimers[elementId] = setTimeout(() => {
-                                resolve(elementId);
-                            }, hoverSelectionTime);
-                        }
-                    } else {
-                        if (element.classList.contains('hover')) {
-                            element.classList.remove('hover');
-                            if (hoverTimers[elementId]) {
-                                clearTimeout(hoverTimers[elementId]);
-                                hoverTimers[elementId] = null;
+                        } else {
+                            if (element.classList.contains('hover')) {
+                                element.classList.remove('hover');
+                                if (hoverTimers[elementId]) {
+                                    clearTimeout(hoverTimers[elementId]);
+                                    hoverTimers[elementId] = null;
+                                }
                             }
                         }
-                    }
-                }, kinectCursorRefreshTime);
-                intervals.push(intervalId);
+                    }, kinectCursorRefreshTime);
+                    intervals.push(intervalId);
+                }
             });
         }
         
@@ -145,11 +147,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         function enableSurveyCheckEventListeners(resolve) {
             const buttons = ['yes', 'no', 'exit'];
-            enableEventListeners(buttons, resolve);
-        }
-
-        function enableSurveyEventListeners(resolve) {
-            const buttons = ['1', '2', '3', '4', '5', 'exit'];
             enableEventListeners(buttons, resolve);
         }
 
